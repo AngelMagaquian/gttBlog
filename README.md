@@ -1,73 +1,80 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# App server
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto pretende ser un blog con temática de Rick and Morty, cumpliendo con los requerimientos de la prueba técnica tanto a nivel tecnológico como con un poco de mi estilo.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Teconologias empleadas:
+* NestJs.
+* TypeScript.
+* MongoDb.
+* WebSocket.
+* Bcryptjs.
 
-## Description
+# Set up
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+El proyecto corre en el puerto por defecto de NestJS `localhost://3000`. Es importante respetar este detalle ya que la API del lado del cliente esta configurada para esa URL.
 
-## Installation
+### Requisitos Previos
+- Node.js
+- npm
 
-```bash
-$ npm install
-```
+### Instalación
 
-## Running the app
+1. Clonar el repositorio:
+    ```sh
+    git clone https://github.com/AngelMagaquian/gttBlogApi
+    ```
+2. Navegar al directorio del proyecto:
+    ```sh
+    cd gttBlogApi
+    ```
+3. Instalar las dependencias:
+    ```sh
+    npm install
+    ```
 
-```bash
-# development
-$ npm run start
+### Ejecución
+1. Ejecutar el comando para iniciar el servidor de desarrollo:
+    ```sh
+    npm run start:dev
+    ```
 
-# watch mode
-$ npm run start:dev
+## Organización
 
-# production mode
-$ npm run start:prod
-```
+- Se divide en dos modulos principales con sus respectivos services y controllers: `users` y `posts`, sumado al modulo de `websocket`.
+- En la carpeta `schemas` se encuentran los esquemas para las colecciones de usuarios y posteos con los requerimientos para cada campo.
+- En la carpeta `dto` se encuentran los dto de user y post con sus interfaces basadas en clases para el uso de los decorators de class-validator.
+- El archivo `main` ya cuenta con la autorización de CORS.
+- La base de datos es una local de mongoDb importada en `app.module.ts` `mongodb://localhost/blogDb`
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+Se pueden realizar pruebas con Postman o cualquier programa similar con los siguientes enrutamientos:
+- `http://localhost:3000/users/`
+- - `create` con el metodo `POST` JSON de ejemplo 
+    ````
+    {
+        "name":"Rick",
+        "lastName": "Sanchez",
+        "email": "ricksanchez@gmail.com",
+        "pass": "Rick&MortyC137",
+        "pic": "",
+        "bio": ""
+    }
+    ````
+- - `logIn` con el metodo `POST` JSON de ejemplo 
+    ````
+    {
+        "email": "ricksanchez@gmail.com",
+        "pass": "Rick&MortyC137"
+    }
+    ````
+- `http://localhost:3000/posts/`
+- - `:limit` con el metodo `GET` donde limit es un número para obtener los ultimos posteos.
+- - `getPostByUser/:id` con el metodo `GET` donde :id es referente a un usuario para traer todas sus publicaciones.
+- - `createPost`con el metodo `POST` JSON de ejemplo
+    ````
+    {
+        "content":"¡Wubba lubba dub dub!",
+        "user":<idDeUsuario>
+    }
+    ````
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
